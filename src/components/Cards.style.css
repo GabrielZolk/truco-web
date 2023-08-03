@@ -1,0 +1,42 @@
+.cards-container {
+    position: relative;
+    width: 100px;
+    height: 140px;
+    display: flex;
+}
+
+.cards {
+    transform-style: preserve-3d;
+    width: 100px;
+    height: 140px;
+    transition: transform 0.5s;
+    margin: 0 5px 0 5px;
+}
+
+.cards__front,
+.cards__back {
+    
+    width: 100%;
+    height: 100%;
+    display: flex;
+    backface-visibility: hidden;
+}
+
+.cards__front img,
+.cards__back img {
+    border-radius: 5px;
+}
+
+.cards__front {
+    transform: rotateY(180deg);
+    position: absolute;
+}
+
+.cards__back {
+    
+}
+
+.flip {
+    transform: rotateY(180deg);
+}
+
