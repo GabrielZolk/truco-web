@@ -1,50 +1,46 @@
-
-import { cards } from '../data/data';
+/* eslint-disable react/prop-types */
 import './cards.style.css';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { setPick } from '../redux/pickerSlice';
+import { setCardState } from '../redux/cardClickSlice';
+
 // eslint-disable-next-line react/prop-types
-export default function Cards({ playerIndex }) {
-    function shuffleCards(cards) {
-        const shuffledCards = [...cards];
-
+export default function Cards({ playerIndex, playerHand }) {
     
-        for (let i = shuffledCards.length - 1; i > 0; i--) {
-            const randomIndex = Math.floor(Math.random() * (i + 1));
-            [shuffledCards[i], shuffledCards[randomIndex]] = [shuffledCards[randomIndex], shuffledCards[i]];
+    const cardClicked = useSelector(state => state.cardClicked.value);
+    const selectedCardIndex = useSelector(state => state.cardPicked.value);
+    
+    const dispatch = useDispatch();
+
+    function handleClick(index) {
+        if (playerIndex === 0) {
+            dispatch(setCardState(true))
+            dispatch(setPick(index))
         }
-
-        return shuffledCards;
     }
-
-    function spreadCards(shuffledCards) {
-        const numPlayers = 4;
-        const cardsPerPlayer = 3;
-        const playerHands = [];
-
-        for (let i = 0; i < numPlayers; i++) {
-            const inicio = i * cardsPerPlayer;
-            const fim = inicio + cardsPerPlayer;
-            const playerHand = shuffledCards.slice(inicio, fim);
-            playerHands.push(playerHand);
-        }
-
-        return playerHands;
-    }
-
-    const shuffledCards = shuffleCards(cards);
-    const playerHands = spreadCards(shuffledCards);
-    const playerHandNow = playerHands[playerIndex];
 
     return (
         <div className='cards-container'>
-            {playerHandNow.map((card, index) => {
+            {playerHand.map((card, index) => {
+                const isCardSelected = playerIndex === 0 && cardClicked && selectedCardIndex === index;
+                const cardStyle = {
+                    position: isCardSelected ? 'absolute' : 'static',
+                    top: isCardSelected ? '0' : 'auto',
+                };
+
                 return (
-                    <div className='cards' key={index}>
+                    <div
+                        className={`cards ${playerIndex === 0 ? 'flip' : ''} ${isCardSelected ? 'clicked' : ''}`}
+                        key={index}
+                        onClick={() => handleClick(index)}
+                        style={cardStyle}
+                    >
                         <div className="cards__front">
-                            <img src={`../public/Game/frontface/${card}.png`} alt={`Card ${index + 1}`} />
+                            <img src={`/Game/frontface/${card}.png`} alt={`Card ${index + 1}`} />
                         </div>
                         <div className="cards__back">
-                            <img src="../public/Game/backface.png" alt="Back Face" />
+                            <img src="/Game/backface.png" alt="Back Face" />
                         </div>
                     </div>
                 );

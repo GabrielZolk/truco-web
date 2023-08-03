@@ -40,3 +40,7 @@
     transform: rotateY(180deg);
 }
 
+.clicked {
+    transition: transform 0.5s;
+    transform: rotateY(180deg) translate(calc(0vw - 0px), calc(-18vw - 0px));
+}
